@@ -109,7 +109,7 @@ instance ConvertAttempt [Char] Int where
 
 -- Rational
 instance ConvertSuccess (Ratio Integer) [Char] where
-    convertSuccess = show
+    convertSuccess = show . (fromRational :: Rational -> Double)
 instance ConvertAttempt [Char] (Ratio Integer) where
     convertAttempt = SF.read
 
