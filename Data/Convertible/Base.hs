@@ -27,6 +27,8 @@ For license and copyright information, see the file COPYRIGHT
 
 module Data.Convertible.Base( ConvertAttempt (..),
                               ConvertSuccess (..),
+                              cs,
+                              ca,
                               ConversionException (..),
                               convertUnsafe,
                               convertAttemptWrap
@@ -47,11 +49,19 @@ class ConvertAttempt a b where
      -}
     convertAttempt :: a -> Attempt b
 
+-- | A convenience synonym for 'convertAttempt'
+ca :: ConvertAttempt x y => x -> Attempt y
+ca = convertAttempt
+
 {- | A typeclass that represents something that guarantees a successful conversion.
 A @ConvertSuccess a b@ instance represents an @a@ that can be converted to a @b@. -}
 class ConvertAttempt a b => ConvertSuccess a b where
     {- | Convert @a@ to @b@. -}
     convertSuccess :: a -> b
+
+-- | A convenience synonym for 'convertSuccess'
+cs :: ConvertSuccess x y => x -> y
+cs = convertSuccess
 
 instance ConvertSuccess a b => ConvertAttempt a b where
     convertAttempt = return . convertSuccess
