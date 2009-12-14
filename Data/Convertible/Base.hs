@@ -26,6 +26,7 @@ For license and copyright information, see the file COPYRIGHT
 -}
 
 module Data.Convertible.Base( ConvertAttempt (..),
+                              failure,
                               ConvertSuccess (..),
                               cs,
                               ca,
@@ -55,7 +56,7 @@ ca = convertAttempt
 
 {- | A typeclass that represents something that guarantees a successful conversion.
 A @ConvertSuccess a b@ instance represents an @a@ that can be converted to a @b@. -}
-class ConvertAttempt a b => ConvertSuccess a b where
+class ConvertSuccess a b where
     {- | Convert @a@ to @b@. -}
     convertSuccess :: a -> b
 
