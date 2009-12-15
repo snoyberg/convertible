@@ -1,10 +1,9 @@
 {-# LANGUAGE DeriveDataTypeable #-}
-{-# LANGUAGE OverlappingInstances #-}
 {-# LANGUAGE ExistentialQuantification #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE UndecidableInstances #-}
+{-# LANGUAGE TemplateHaskell #-}
 {-
 Copyright (C) 2009 John Goerzen <jgoerzen@complete.org>
 
@@ -32,12 +31,14 @@ module Data.Convertible.Base( ConvertAttempt (..),
                               ca,
                               ConversionException (..),
                               convertUnsafe,
-                              convertAttemptWrap
+                              convertAttemptWrap,
+                              deriveAttempts
                              )
 where
 import Data.Attempt
 import Control.Exception (Exception)
 import Data.Typeable (Typeable)
+import Language.Haskell.TH
 
 ----------------------------------------------------------------------
 -- Conversions
@@ -64,14 +65,13 @@ class ConvertSuccess a b where
 cs :: ConvertSuccess x y => x -> y
 cs = convertSuccess
 
-instance ConvertSuccess a b => ConvertAttempt a b where
-    convertAttempt = return . convertSuccess
-
 {- | Any type can be converted to itself. -}
 instance ConvertSuccess a a where
     convertSuccess = id
+instance ConvertAttempt a a where
+    convertAttempt = return
 
-{-
+{- FIXME consider exposing this
 {- | Lists of any convertible type can be converted. -}
 instance Convertible a b => Convertible [a] [b] where
     safeConvert = mapM safeConvert
@@ -101,3 +101,22 @@ convertAttemptWrap :: (ConvertAttempt a b,
                    -> m b
 convertAttemptWrap = attempt (failure . ConversionException) return .
                      convertAttempt
+
+convertAttempt' :: ConvertSuccess x y => x -> Attempt y
+convertAttempt' = return . convertSuccess
+
+-- | Template Haskell to derive 'ConvertAttempt' instances from the
+-- corresponding 'ConvertSuccess' instances.
+deriveAttempts :: [(Name, Name)] -> Q [Dec]
+deriveAttempts pairs = do
+    ca' <- [|convertAttempt'|]
+    return $ map (helper ca') pairs
+      where
+        helper ca' (x, y) =
+            InstanceD
+                []
+                (ConT (mkName "ConvertAttempt") `AppT` ConT x `AppT` ConT y)
+                [ FunD (mkName "convertAttempt")
+                    [ Clause [] (NormalB ca') []
+                    ]
+                ]

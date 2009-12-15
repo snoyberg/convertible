@@ -1,6 +1,8 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE TypeSynonymInstances #-}
+{-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 ---------------------------------------------------------
 --
@@ -25,6 +27,29 @@ import qualified Data.Text as ST
 import qualified Data.Text.Lazy as LT
 import qualified Data.Text.Encoding as STE
 import qualified Data.Text.Lazy.Encoding as LTE
+
+$(deriveAttempts
+    [ (''BL.ByteString, ''BS.ByteString)
+    , (''BL.ByteString, ''String)
+    , (''BL.ByteString, ''LT.Text)
+    , (''BL.ByteString, ''ST.Text)
+    , (''BS.ByteString, ''BL.ByteString)
+    , (''BS.ByteString, ''String)
+    , (''BS.ByteString, ''LT.Text)
+    , (''BS.ByteString, ''ST.Text)
+    , (''String, ''BL.ByteString)
+    , (''String, ''BS.ByteString)
+    , (''String, ''LT.Text)
+    , (''String, ''ST.Text)
+    , (''LT.Text, ''BL.ByteString)
+    , (''LT.Text, ''BS.ByteString)
+    , (''LT.Text, ''String)
+    , (''LT.Text, ''ST.Text)
+    , (''ST.Text, ''BL.ByteString)
+    , (''ST.Text, ''BS.ByteString)
+    , (''ST.Text, ''String)
+    , (''ST.Text, ''LT.Text)
+    ])
 
 toST :: ConvertSuccess a ST.Text => a -> ST.Text
 toST = convertSuccess

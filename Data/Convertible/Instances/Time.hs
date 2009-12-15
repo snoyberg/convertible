@@ -1,6 +1,7 @@
 {-# LANGUAGE CPP #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TypeSynonymInstances #-}
+{-# LANGUAGE TemplateHaskell #-}
 {- |
    Module     : Data.ConvertAttempt.Instances.Time
    Copyright  : Copyright (C) 2009 John Goerzen
@@ -40,6 +41,15 @@ import Data.Typeable
 #endif
 import Data.Ratio
 import Foreign.C.Types
+
+$(deriveAttempts
+    [ (''NominalDiffTime, ''ST.TimeDiff)
+    , (''POSIXTime, ''ST.ClockTime)
+    , (''ST.CalendarTime, ''ZonedTime)
+    , (''ST.ClockTime, ''POSIXTime)
+    , (''ST.TimeDiff, ''NominalDiffTime)
+    , (''ZonedTime, ''ST.CalendarTime)
+    ])
 
 ----------------------------------------------------------------------
 -- Intra-System.Time stuff

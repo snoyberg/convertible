@@ -2,7 +2,9 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE TypeSynonymInstances #-}
 {-# LANGUAGE CPP #-}
+{-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 ---------------------------------------------------------
 --
@@ -40,7 +42,6 @@ import qualified Data.Text as ST
 import qualified Data.Text.Lazy as LT
 
 import Data.Time.Calendar
-import Data.Ratio (Ratio)
 
 #if TEST
 import Test.Framework (testGroup, Test)
@@ -50,8 +51,30 @@ import Test.Framework.Providers.QuickCheck (testProperty)
 import Test.QuickCheck
 import Data.Char (isDigit)
 import Data.Ratio ((%))
-import Debug.Trace
 #endif
+
+$(deriveAttempts
+    [ (''Bool, ''BL.ByteString)
+    , (''Bool, ''BS.ByteString)
+    , (''Bool, ''String)
+    , (''Bool, ''LT.Text)
+    , (''Bool, ''ST.Text)
+    , (''Day, ''BL.ByteString)
+    , (''Day, ''BS.ByteString)
+    , (''Day, ''String)
+    , (''Day, ''LT.Text)
+    , (''Day, ''ST.Text)
+    , (''Int, ''BL.ByteString)
+    , (''Int, ''BS.ByteString)
+    , (''Int, ''String)
+    , (''Int, ''LT.Text)
+    , (''Int, ''ST.Text)
+    , (''Rational, ''BL.ByteString)
+    , (''Rational, ''BS.ByteString)
+    , (''Rational, ''String)
+    , (''Rational, ''LT.Text)
+    , (''Rational, ''ST.Text)
+    ])
 
 {- Not needed yet
 fromString :: ConvertSuccess String a => String -> a
@@ -123,13 +146,13 @@ instance ConvertAttempt [Char] Int where
     convertAttempt = SF.read
 
 -- Rational
-instance ConvertSuccess (Ratio Integer) [Char] where
+instance ConvertSuccess Rational [Char] where
     convertSuccess = show . (fromRational :: Rational -> Double)
-instance ConvertAttempt [Char] (Ratio Integer) where
+instance ConvertAttempt [Char] Rational where
     convertAttempt = fmap realToFrac . (SF.read :: String -> Attempt Double)
 
 #if TEST
-instance Arbitrary (Ratio Integer) where
+instance Arbitrary Rational where
     coarbitrary = undefined
     arbitrary = do
         n <- arbitrary
@@ -175,13 +198,13 @@ instance ConvertAttempt ST.Text Int where
     convertAttempt = fromStringA <=< convertAttempt
 instance ConvertAttempt LT.Text Int where
     convertAttempt = fromStringA <=< convertAttempt
-instance ConvertAttempt BS.ByteString (Ratio Integer) where
+instance ConvertAttempt BS.ByteString Rational where
     convertAttempt = fromStringA <=< convertAttempt
-instance ConvertAttempt BL.ByteString (Ratio Integer) where
+instance ConvertAttempt BL.ByteString Rational where
     convertAttempt = fromStringA <=< convertAttempt
-instance ConvertAttempt ST.Text (Ratio Integer) where
+instance ConvertAttempt ST.Text Rational where
     convertAttempt = fromStringA <=< convertAttempt
-instance ConvertAttempt LT.Text (Ratio Integer) where
+instance ConvertAttempt LT.Text Rational where
     convertAttempt = fromStringA <=< convertAttempt
 instance ConvertSuccess Day BS.ByteString where
     convertSuccess = convertSuccess . toString
@@ -207,13 +230,13 @@ instance ConvertSuccess Int ST.Text where
     convertSuccess = convertSuccess . toString
 instance ConvertSuccess Int LT.Text where
     convertSuccess = convertSuccess . toString
-instance ConvertSuccess (Ratio Integer) BS.ByteString where
+instance ConvertSuccess Rational BS.ByteString where
     convertSuccess = convertSuccess . toString
-instance ConvertSuccess (Ratio Integer) BL.ByteString where
+instance ConvertSuccess Rational BL.ByteString where
     convertSuccess = convertSuccess . toString
-instance ConvertSuccess (Ratio Integer) ST.Text where
+instance ConvertSuccess Rational ST.Text where
     convertSuccess = convertSuccess . toString
-instance ConvertSuccess (Ratio Integer) LT.Text where
+instance ConvertSuccess Rational LT.Text where
     convertSuccess = convertSuccess . toString
 
 #if TEST
