@@ -57,8 +57,6 @@ toST = convertSuccess
 toLT :: ConvertSuccess a LT.Text => a -> LT.Text
 toLT = convertSuccess
 
-instance ConvertSuccess [Char] [Char] where
-    convertSuccess = id
 instance ConvertSuccess [Char] BS.ByteString where
     convertSuccess = convertSuccess . toST
 instance ConvertSuccess [Char] BL.ByteString where
@@ -69,8 +67,6 @@ instance ConvertSuccess [Char] LT.Text where
     convertSuccess = LT.pack
 instance ConvertSuccess BS.ByteString [Char] where
     convertSuccess = convertSuccess . toST
-instance ConvertSuccess BS.ByteString BS.ByteString where
-    convertSuccess = id
 instance ConvertSuccess BS.ByteString BL.ByteString where
     convertSuccess = BL.fromChunks . return
 instance ConvertSuccess BS.ByteString ST.Text where
@@ -81,8 +77,6 @@ instance ConvertSuccess BL.ByteString [Char] where
     convertSuccess = convertSuccess . toLT
 instance ConvertSuccess BL.ByteString BS.ByteString where
     convertSuccess = BS.concat . BL.toChunks
-instance ConvertSuccess BL.ByteString BL.ByteString where
-    convertSuccess = id
 instance ConvertSuccess BL.ByteString ST.Text where
     convertSuccess = convertSuccess . BS.concat . BL.toChunks
 instance ConvertSuccess BL.ByteString LT.Text where
@@ -93,8 +87,6 @@ instance ConvertSuccess ST.Text BS.ByteString where
     convertSuccess = STE.encodeUtf8
 instance ConvertSuccess ST.Text BL.ByteString where
     convertSuccess = convertSuccess . STE.encodeUtf8
-instance ConvertSuccess ST.Text ST.Text where
-    convertSuccess = id
 instance ConvertSuccess ST.Text LT.Text where
     convertSuccess = LT.fromChunks . return
 instance ConvertSuccess LT.Text [Char] where
@@ -105,5 +97,3 @@ instance ConvertSuccess LT.Text BL.ByteString where
     convertSuccess = LTE.encodeUtf8
 instance ConvertSuccess LT.Text ST.Text where
     convertSuccess = ST.concat . LT.toChunks
-instance ConvertSuccess LT.Text LT.Text where
-    convertSuccess = id
