@@ -33,7 +33,6 @@ import Data.Convertible.Utils
 import Data.Convertible.Instances.Num()
 import qualified System.Time as ST
 import Data.Time
-import Data.Time.Clock
 import Data.Time.Clock.POSIX
 import Data.Time.Calendar.OrdinalDate
 #ifndef TIME_GTE_113
