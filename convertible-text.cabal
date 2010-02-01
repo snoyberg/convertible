@@ -1,5 +1,5 @@
 Name: convertible-text
-Version: 0.2.0.2
+Version: 0.2.0.3
 License: LGPL
 Maintainer: Michael Snoyman <michael@snoyman.com>
 Author: John Goerzen, Michael Snoyman
@@ -41,7 +41,7 @@ library
   Build-Depends: base >= 4 && < 5,
                  old-time >= 1.0.0.2 && < 1.1,
                  containers >= 0.2.0.1 && < 0.4,
-                 text >= 0.5 && < 0.6,
+                 text >= 0.5 && < 0.8,
                  bytestring >= 0.9.1.4 && < 0.10,
                  safe-failure >= 0.4 && < 0.5,
                  attempt >= 0.2.1 && < 0.3,
