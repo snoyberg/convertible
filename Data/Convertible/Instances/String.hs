@@ -42,15 +42,14 @@ import qualified Data.Text as ST
 import qualified Data.Text.Lazy as LT
 
 import Data.Time.Calendar
+import Data.Ratio
 
 #if TEST
 import Test.Framework (testGroup, Test)
 --import Test.Framework.Providers.HUnit
-import Test.Framework.Providers.QuickCheck (testProperty)
+import Test.Framework.Providers.QuickCheck2 (testProperty)
 --import Test.HUnit hiding (Test, path)
-import Test.QuickCheck
 import Data.Char (isDigit)
-import Data.Ratio ((%))
 #endif
 
 $(deriveAttempts
@@ -147,19 +146,13 @@ instance ConvertAttempt [Char] Int where
 
 -- Rational
 instance ConvertSuccess Rational [Char] where
-    convertSuccess = show . (fromRational :: Rational -> Double)
+    convertSuccess r
+        | denominator r == 1 = show $ numerator r
+        | otherwise = show $ (fromRational r :: Double)
 instance ConvertAttempt [Char] Rational where
     convertAttempt = fmap realToFrac . (SF.read :: String -> Attempt Double)
 
 #if TEST
-instance Arbitrary Rational where
-    coarbitrary = undefined
-    arbitrary = do
-        n <- arbitrary
-        d' <- arbitrary
-        let d =  if d' == 0 then 1 else d'
-        return (n % d)
-
 propRationalId :: Rational -> Bool
 propRationalId r = convertAttempt (convertSuccess r :: String) `almostEquals` r
 
@@ -244,5 +237,14 @@ testSuite :: Test
 testSuite = testGroup "Data.Convertible.Instances.String"
     [ testProperty "propRationalId" propRationalId
     , testProperty "propRationalAllDigits" propRationalAllDigits
+    , testProperty "propRationalAllNums" propRationalAllNums
     ]
+
+propRationalAllNums :: Integer -> Bool
+propRationalAllNums i = go (i % 1) where
+  go :: Rational -> Bool
+  go r
+    | r < 0 = go $ negate r
+    | otherwise = all isDigit $ cs r
+
 #endif

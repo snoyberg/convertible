@@ -1,5 +1,5 @@
 Name: convertible-text
-Version: 0.2.0.3
+Version: 0.2.0.4
 License: LGPL
 Maintainer: Michael Snoyman <michael@snoyman.com>
 Author: John Goerzen, Michael Snoyman
@@ -70,10 +70,10 @@ executable           runtests
         Buildable: True
         cpp-options:     -DTEST
         build-depends:   test-framework,
-                         test-framework-quickcheck,
+                         test-framework-quickcheck2,
                          test-framework-hunit,
                          HUnit,
-                         QuickCheck >= 1 && < 2
+                         QuickCheck >= 2 && < 3
     else
         Buildable: False
     ghc-options:     -Wall
