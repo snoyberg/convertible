@@ -26,7 +26,7 @@ import qualified Data.ByteString.Lazy as BL
 import qualified Data.Text as ST
 import qualified Data.Text.Lazy as LT
 import qualified Data.Text.Encoding as STE
-import qualified Data.Text.Lazy.Encoding as LTE
+import qualified Data.Text.Encoding.Error as TEE
 
 $(deriveAttempts
     [ (''BL.ByteString, ''BS.ByteString)
@@ -70,7 +70,7 @@ instance ConvertSuccess BS.ByteString [Char] where
 instance ConvertSuccess BS.ByteString BL.ByteString where
     convertSuccess = BL.fromChunks . return
 instance ConvertSuccess BS.ByteString ST.Text where
-    convertSuccess = STE.decodeUtf8
+    convertSuccess = STE.decodeUtf8With TEE.lenientDecode
 instance ConvertSuccess BS.ByteString LT.Text where
     convertSuccess = convertSuccess . toST
 instance ConvertSuccess BL.ByteString [Char] where
@@ -80,7 +80,7 @@ instance ConvertSuccess BL.ByteString BS.ByteString where
 instance ConvertSuccess BL.ByteString ST.Text where
     convertSuccess = convertSuccess . BS.concat . BL.toChunks
 instance ConvertSuccess BL.ByteString LT.Text where
-    convertSuccess = LTE.decodeUtf8
+    convertSuccess = LT.fromChunks . map cs . BL.toChunks
 instance ConvertSuccess ST.Text [Char] where
     convertSuccess = ST.unpack
 instance ConvertSuccess ST.Text BS.ByteString where
@@ -94,6 +94,6 @@ instance ConvertSuccess LT.Text [Char] where
 instance ConvertSuccess LT.Text BS.ByteString where
     convertSuccess = convertSuccess . toST
 instance ConvertSuccess LT.Text BL.ByteString where
-    convertSuccess = LTE.encodeUtf8
+    convertSuccess = BL.fromChunks . map STE.encodeUtf8 . LT.toChunks
 instance ConvertSuccess LT.Text ST.Text where
     convertSuccess = ST.concat . LT.toChunks
