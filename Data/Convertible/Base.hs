@@ -95,7 +95,7 @@ instance Exception ConversionException
  'ConversionException'
 -}
 convertAttemptWrap :: (ConvertAttempt a b,
-                       MonadFailure ConversionException m
+                       Failure ConversionException m
                       )
                    => a
                    -> m b

@@ -31,10 +31,9 @@ module Data.Convertible.Instances.String
 import Data.Convertible.Base
 import Data.Typeable (Typeable)
 import Control.Exception (Exception)
-import qualified Safe.Failure as SF
 import Data.Convertible.Instances.Text ()
 import Data.Attempt
-import Control.Monad ((<=<))
+import Control.Monad ((<=<), unless)
 
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as BL
@@ -95,10 +94,10 @@ instance ConvertSuccess Day [Char] where
     convertSuccess = show
 instance ConvertAttempt [Char] Day where
     convertAttempt s = wrapFailure (const $ InvalidDayException s) $ do
-        SF.assert (length s == 10) () $ InvalidDayException s
-        y <- SF.read $ take 4 s
-        m <- SF.read $ take 2 $ drop 5 s
-        d <- SF.read $ take 2 $ drop 8 s
+        unless (length s == 10) $ failure $ InvalidDayException s
+        y <- ca $ take 4 s
+        m <- ca $ take 2 $ drop 5 s
+        d <- ca $ take 2 $ drop 8 s
         return $ fromGregorian y m d
 
 -- Bool
@@ -142,7 +141,13 @@ instance ConvertAttempt [Char] Bool where
 instance ConvertSuccess Int [Char] where
     convertSuccess = show
 instance ConvertAttempt [Char] Int where
-    convertAttempt = SF.read
+    convertAttempt = readMsg "Invalid Int"
+
+-- Integer
+instance ConvertSuccess Integer [Char] where
+    convertSuccess = show
+instance ConvertAttempt [Char] Integer where
+    convertAttempt = readMsg "Invalid Int"
 
 -- Rational
 instance ConvertSuccess Rational [Char] where
@@ -150,7 +155,15 @@ instance ConvertSuccess Rational [Char] where
         | denominator r == 1 = show $ numerator r
         | otherwise = show $ (fromRational r :: Double)
 instance ConvertAttempt [Char] Rational where
-    convertAttempt = fmap realToFrac . (SF.read :: String -> Attempt Double)
+    convertAttempt = fmap realToFrac . readDouble
+
+readDouble :: String -> Attempt Double
+readDouble = readMsg "Invalid double"
+
+readMsg :: Read a => String -> String -> Attempt a
+readMsg msg s = case reads s of
+                    (x, _):_ -> Success x
+                    _ -> failureString $ msg ++ ": " ++ s
 
 #if TEST
 propRationalId :: Rational -> Bool
