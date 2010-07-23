@@ -1,11 +1,11 @@
 Name: convertible-text
-Version: 0.3.0.1
-License: LGPL
+Version: 0.3.0.2
+License: BSD3
 Maintainer: Michael Snoyman <michael@snoyman.com>
 Author: John Goerzen, Michael Snoyman
 Copyright: Copyright (c) 2009-2009 John Goerzen
-license-file: COPYRIGHT
-extra-source-files: COPYING, utils/genCinstances.hs
+license-file: LICENSE
+extra-source-files: utils/genCinstances.hs
 homepage: http://github.com/snoyberg/convertible/tree/text
 Category: Data, Failure
 synopsis: Typeclasses and instances for converting between types
