@@ -1,5 +1,5 @@
 Name: convertible-text
-Version: 0.3.0.4
+Version: 0.3.0.5
 License: BSD3
 Maintainer: Michael Snoyman <michael@snoyman.com>
 Author: John Goerzen, Michael Snoyman
@@ -40,7 +40,7 @@ library
       Buildable: True
   Build-Depends: base >= 4 && < 5,
                  old-time >= 1.0.0.2 && < 1.1,
-                 containers >= 0.2.0.1 && < 0.4,
+                 containers >= 0.2.0.1 && < 0.5,
                  text >= 0.5 && < 0.10,
                  bytestring >= 0.9.1.4 && < 0.10,
                  attempt >= 0.3.0 && < 0.4,
