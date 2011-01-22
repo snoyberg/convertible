@@ -1,9 +1,9 @@
 Name: convertible-text
-Version: 0.3.0.8
+Version: 0.3.0.9
 License: BSD3
 Maintainer: Michael Snoyman <michael@snoyman.com>
 Author: John Goerzen, Michael Snoyman
-Copyright: Copyright (c) 2009-2009 John Goerzen
+Copyright: Copyright (c) 2009-2009 John Goerzen, Copyright (c) 2010-2011 Michael Snoyman
 license-file: LICENSE
 extra-source-files: utils/genCinstances.hs
 homepage: http://github.com/snoyberg/convertible/tree/text

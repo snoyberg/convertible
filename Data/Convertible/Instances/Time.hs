@@ -5,7 +5,7 @@
 {- |
    Module     : Data.ConvertAttempt.Instances.Time
    Copyright  : Copyright (C) 2009 John Goerzen
-   License    : LGPL
+   License    : BSD3
 
    Maintainer : Michael Snoyman <michael@snoyman.com>
    Stability  : provisional
@@ -21,7 +21,7 @@ Copyright (C) 2009 John Goerzen <jgoerzen@complete.org>
 
 All rights reserved.
 
-For license and copyright information, see the file COPYRIGHT
+For license and copyright information, see the file LICENSE
 
 -}
 
