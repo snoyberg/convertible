@@ -2,6 +2,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TypeSynonymInstances #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE FlexibleInstances #-}
 {- |
    Module     : Data.ConvertAttempt.Instances.Time
    Copyright  : Copyright (C) 2009 John Goerzen
