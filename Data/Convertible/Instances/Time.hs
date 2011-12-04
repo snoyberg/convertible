@@ -43,12 +43,12 @@ import Data.Ratio
 import Foreign.C.Types
 
 $(deriveAttempts
-    [ (''NominalDiffTime, ''ST.TimeDiff)
-    , (''POSIXTime, ''ST.ClockTime)
-    , (''ST.CalendarTime, ''ZonedTime)
-    , (''ST.ClockTime, ''POSIXTime)
-    , (''ST.TimeDiff, ''NominalDiffTime)
-    , (''ZonedTime, ''ST.CalendarTime)
+    [ ([t| NominalDiffTime |], [t| ST.TimeDiff     |])
+    , ([t| POSIXTime       |], [t| ST.ClockTime    |])
+    , ([t| ST.CalendarTime |], [t| ZonedTime       |])
+    , ([t| ST.ClockTime    |], [t| POSIXTime       |])
+    , ([t| ST.TimeDiff     |], [t| NominalDiffTime |])
+    , ([t| ZonedTime       |], [t| ST.CalendarTime |])
     ])
 
 ----------------------------------------------------------------------
