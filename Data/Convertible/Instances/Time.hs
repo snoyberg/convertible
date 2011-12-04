@@ -36,7 +36,7 @@ import qualified System.Time as ST
 import Data.Time
 import Data.Time.Clock.POSIX
 import Data.Time.Calendar.OrdinalDate
-#ifndef TIME_GTE_113
+#if !MIN_VERSION_time(1,1,3)
 import Data.Typeable
 #endif
 import Data.Ratio
@@ -81,7 +81,7 @@ instance ConvertSuccess Integer ST.ClockTime where
 
 ------------------------------ POSIX and UTC times
 
-#ifndef TIME_GTE_113
+#if !MIN_VERSION_time(1,1,3)
 instance Typeable NominalDiffTime where
     typeOf _ = mkTypeName "NominalDiffTime"
 
