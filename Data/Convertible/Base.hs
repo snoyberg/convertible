@@ -107,16 +107,14 @@ convertAttempt' = return . convertSuccess
 
 -- | Template Haskell to derive 'ConvertAttempt' instances from the
 -- corresponding 'ConvertSuccess' instances.
-deriveAttempts :: [(Name, Name)] -> Q [Dec]
-deriveAttempts pairs = do
-    ca' <- [|convertAttempt'|]
-    return $ map (helper ca') pairs
-      where
-        helper ca' (x, y) =
-            InstanceD
-                []
-                (ConT (mkName "ConvertAttempt") `AppT` ConT x `AppT` ConT y)
-                [ FunD (mkName "convertAttempt")
-                    [ Clause [] (NormalB ca') []
+deriveAttempts :: [(Q Type, Q Type)] -> Q [Dec]
+deriveAttempts = mapM helper
+    where
+      helper (x, y) =
+          instanceD
+              (cxt [])
+              (conT ''ConvertAttempt `appT` x `appT` y)
+              [ funD 'convertAttempt
+                    [ clause [] (normalB [| convertAttempt' |]) []
                     ]
-                ]
+              ]
