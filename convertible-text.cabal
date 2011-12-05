@@ -1,5 +1,5 @@
 Name: convertible-text
-Version: 0.4.0
+Version: 0.4.0.1
 License: BSD3
 Maintainer: Michael Snoyman <michael@snoyman.com>
 Author: John Goerzen, Michael Snoyman
@@ -42,7 +42,7 @@ library
                  bytestring >= 0.9.1.4 && < 0.10,
                  attempt >= 0.3.0 && < 0.4,
                  template-haskell,
-                 time <= 1.3
+                 time
 
   GHC-Options: -Wall -fno-warn-orphans
 
