@@ -1,5 +1,5 @@
 Name: convertible-text
-Version: 0.4.0.1
+Version: 0.4.0.2
 License: BSD3
 Maintainer: Michael Snoyman <michael@snoyman.com>
 Author: John Goerzen, Michael Snoyman
@@ -8,7 +8,7 @@ license-file: LICENSE
 extra-source-files: utils/genCinstances.hs
 homepage: http://github.com/snoyberg/convertible/tree/text
 Category: Data, Failure
-synopsis: Typeclasses and instances for converting between types
+synopsis: Typeclasses and instances for converting between types (deprecated)
 Description:
  This is a port of John Goerzen's convertible package, intended to distinguish between conversions which are guaranteed to succeed and those which might fail.  It uses the attempt package, which in turn uses the failure package, so that this package is fully compatible with the failure framework.
  .
