@@ -30,7 +30,7 @@ module Data.Convertible.Instances.String
 
 import Data.Convertible.Base
 import Data.Typeable (Typeable)
-import Control.Exception (Exception)
+import Control.Exception (ErrorCall(..), Exception)
 import Data.Convertible.Instances.Text ()
 import Data.Attempt
 import Control.Monad ((<=<), unless)
@@ -93,7 +93,7 @@ instance Exception InvalidDayException
 instance ConvertSuccess Day [Char] where
     convertSuccess = show
 instance ConvertAttempt [Char] Day where
-    convertAttempt s = wrapFailure (const $ InvalidDayException s) $ do
+    convertAttempt s = do
         unless (length s == 10) $ failure $ InvalidDayException s
         y <- ca $ take 4 s
         m <- ca $ take 2 $ drop 5 s
@@ -163,7 +163,7 @@ readDouble = readMsg "Invalid double"
 readMsg :: Read a => String -> String -> Attempt a
 readMsg msg s = case reads s of
                     (x, _):_ -> Success x
-                    _ -> failureString $ msg ++ ": " ++ s
+                    _ -> Failure . ErrorCall $ msg ++ ": " ++ s
 
 #if TEST
 propRationalId :: Rational -> Bool
